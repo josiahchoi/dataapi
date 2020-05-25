@@ -6,5 +6,9 @@
   "password": "dataapi",
   "database": "dataapi",
   "entities": ["dist/**/*.entity{.ts,.js}"],
-  "synchronize": true
+  "synchronize": false,
+  "migrations": ["migration/*.ts"],
+  "cli": {
+      "migrationsDir": "migration"
+  }
 }
