@@ -84,3 +84,11 @@ nest g module users
 nest g service users
 nest g controller users
 nest g class users/user.entity
+
+## Genearte Migration
+
+npm run typeorm:cli -- migration:generate -n Init
+
+## Create Migration
+
+npm run typeorm:cli -- migration:create -n Hello

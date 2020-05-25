@@ -5,7 +5,7 @@
   "username": "dataapi",
   "password": "dataapi",
   "database": "dataapi",
-  "entities": ["dist/**/*.entity{.ts,.js}"],
+  "entities": ["src/data/**/*.entity.ts"],
   "synchronize": false,
   "migrations": ["migration/*.ts"],
   "cli": {
