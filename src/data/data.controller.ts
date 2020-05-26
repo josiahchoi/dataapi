@@ -32,7 +32,7 @@ export class DataController {
           if (e instanceof Error){
             if (e.message === "Duplicated") {
               return res.status(HttpStatus.CONFLICT).send();
-            } 
+            }
           }
           return res.status(HttpStatus.BAD_REQUEST).send(); 
       }

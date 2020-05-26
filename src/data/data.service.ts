@@ -15,13 +15,46 @@ export class DataService {
         return  specEntities.find((x) => x.columnName === columnName)
      }
 
+
+    validate = (data: Table1DataDto, specEntities: SpecEntity[]): void => {
+        for (let key in data){
+            let spec = this.findSpec(key, specEntities)
+            if (spec) {
+                if (!this.validateValueType(data[key], spec.dataType)){
+                    throw new Error("InvalidDataType")
+                }
+            } else {
+                throw new Error("TypeNotFound")
+            }
+        }
+    }
+
+    validateValueType = (value:any, type: string): boolean => {
+        switch (type) {
+            case "TEXT":
+                if (typeof value === 'string' || value instanceof String) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case "INTEGER":
+                return Number.isInteger(value)
+            case "BOOLEAN":
+                if (typeof value === "boolean"){
+                   return true;
+                  } else {
+                    return false;
+                  }
+            default:
+                throw new Error("TypeNotFound")
+        }
+    }
+
     applyDataEntity = (dataEntity: DataEntity, data: Table1DataDto, specEntities: SpecEntity[]): void => {
-//        const dataEntity = new DataEntity();
         for (let key in data){
             let spec = this.findSpec(key, specEntities)
             dataEntity[`column${spec.row}`] = this.valueConverter(data[key], spec.dataType);
         }
-//        return dataEntity;
     }
 
     valueConverter = (value: any, type: string): string => {
@@ -76,6 +109,7 @@ export class DataService {
 
     async postData(data: Table1DataDto): Promise<DataEntity> {
         const specEntities = await this.specRepository.find()
+        this.validate(data, specEntities);
         const existingData = await this.dataRepository.findOne({where: this.createQueryPart({name: data.name}, specEntities)})
         if (existingData){
             throw new Error("Duplicated");            
@@ -99,6 +133,7 @@ export class DataService {
 
     async updateData(data: Table1DataDto): Promise<DataEntity> {
         const specEntities = await this.specRepository.find()
+        this.validate(data, specEntities);
         const existingDataEntity = await this.dataRepository.findOneOrFail({where: this.createQueryPart({name: data.name}, specEntities)})
         this.applyDataEntity(existingDataEntity, data, specEntities);
         return this.dataRepository.save(existingDataEntity);

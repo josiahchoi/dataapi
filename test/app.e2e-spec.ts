@@ -67,18 +67,66 @@ describe('AppController (e2e)', () => {
       })
   });
 
+  it('should not allow invalid data with attribute not in spec', () => {
+    const invalidData = {
+      name: "InvalidAttribute",
+      valid: true,
+      other: 103,
+  }
+    
+    return request(app.getHttpServer())
+      .post('/data')
+      .send(invalidData)
+      .expect(HttpStatus.BAD_REQUEST)
+  });
+
+  it('should not allow invalid data with data in wrong datatype INTEGER', () => {
+    const invalidData = {
+      name: "WrongDataTypeInteger",
+      valid: true,
+      count: 0.5,
+  }
+    
+    return request(app.getHttpServer())
+      .post('/data')
+      .send(invalidData)
+      .expect(HttpStatus.BAD_REQUEST)
+  });
+
+  it('should not allow invalid data with data in wrong datatype BOOLEAN', () => {
+    const invalidData = {
+      name: "WrongDataTypeBoolean",
+      valid: 'true',
+      count: 5,
+  }
+    
+    return request(app.getHttpServer())
+      .post('/data')
+      .send(invalidData)
+      .expect(HttpStatus.BAD_REQUEST)
+  });
+
+  it('should not allow invalid data with data in wrong datatype STRING', () => {
+    const invalidData = {
+      name: 40,
+      valid: true,
+      count: 10,
+  }
+    
+    return request(app.getHttpServer())
+      .post('/data')
+      .send(invalidData)
+      .expect(HttpStatus.BAD_REQUEST)
+  });
+
+
+
 
   it('should query data with name: Apple', () => {
     return request(app.getHttpServer())
       .get('/data?name=Apple')
       .expect(HttpStatus.OK)
       .expect({ name: 'Apple', valid: true, count: 1 })
-//       .end((err, res) => {
-//         if (err) return done(err);
-// //        expect(res.body).to.be.eql({ error: "make an error" });
-//         console.log(res.body)
-//         done();
-//       });
   });
 
   it('should return 404 with name: Something', () => {
@@ -114,7 +162,18 @@ describe('AppController (e2e)', () => {
     .expect(updatedBanadaData)
   });
 
-
+  it('should not update Banana Data with attribute not in spec', () => {
+    const updatedBanadaData = {
+      name: "Banana",
+      valid: true,
+      other: 12,
+    }
+    
+    return request(app.getHttpServer())
+      .put('/data')
+      .send(updatedBanadaData)
+      .expect(HttpStatus.BAD_REQUEST)
+  });
 
   afterAll(async () => {
     await app.close();
