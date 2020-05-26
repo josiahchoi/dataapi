@@ -1,13 +1,15 @@
-import { Controller, Post, Body, Res, Get, Param, Query, Delete, HttpCode, HttpStatus, Put } from '@nestjs/common';
+import { Controller, Post, Body, Res, Get, Param, Query, Delete, HttpCode, HttpStatus, Put, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { DataService } from './data.service';
 import { Table1DataDto } from './interfaces/table1data.dto';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError'
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('data')
 export class DataController {
     constructor(private readonly dataService: DataService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Get()
     async query(@Query() query, @Res() res:Response): Promise<Response> {
       try {
@@ -23,6 +25,7 @@ export class DataController {
       }
     } 
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     async postData(@Body() data : Table1DataDto, @Res() res:Response): Promise<Response> {
       try {
@@ -38,6 +41,7 @@ export class DataController {
       }
     }
 
+    @UseGuards(JwtAuthGuard)
     @Put()
     async updateData(@Body() data : Table1DataDto, @Res() res:Response): Promise<Response> {
       try {
