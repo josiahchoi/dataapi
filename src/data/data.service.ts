@@ -70,27 +70,27 @@ export class DataService {
     convertTable1DataDto = (dataEntity: DataEntity, specEntities: SpecEntity[]): Table1DataDto => {
         const table1Data = new Table1DataDto();
         specEntities.forEach((specEntity) => table1Data[specEntity.columnName] = this.valueConverterFromString(dataEntity[`column${specEntity.row}`], specEntity.dataType))
-        console.log("Data Entity: ")
-        console.log(dataEntity);
-        console.log("Table1Data: ")
-        console.log(table1Data);
         return table1Data;
     }
 
-
     async postData(data: Table1DataDto): Promise<DataEntity> {
         const specEntities = await this.specRepository.find()
-        const dataEntity = this.createDataEntity(data, specEntities);
-        return this.dataRepository.save(dataEntity);
+        const existingData = await this.dataRepository.findOne({where: this.createQueryPart({name: data.name}, specEntities)})
+        if (existingData){
+            throw new Error("Duplicated");            
+        } else {
+            const dataEntity = this.createDataEntity(data, specEntities);
+            return this.dataRepository.save(dataEntity);
+        }
     }
 
-    async queryData(query: any): Promise<Table1DataDto[]> {
+    async queryData(query: any): Promise<Table1DataDto> {
         const specEntities = await this.specRepository.find()
-        const dataEntities = await this.dataRepository.find({where: this.createQueryPart(query, specEntities)})
-        const table1DataDto: Table1DataDto[] = [];
-        dataEntities.forEach((dataEntity) => table1DataDto.push(this.convertTable1DataDto(dataEntity, specEntities)))
-        return new Promise<Table1DataDto[]>((resolve) => {
-            resolve(table1DataDto);
+        const dataEntity = await this.dataRepository.findOneOrFail({where: this.createQueryPart(query, specEntities)})
+        //const table1DataDto: Table1DataDto[] = [];
+        //dataEntities.forEach((dataEntity) => table1DataDto.push(this.convertTable1DataDto(dataEntity, specEntities)))
+        return new Promise<Table1DataDto>((resolve) => {
+            resolve(this.convertTable1DataDto(dataEntity, specEntities));
           });;
     }
 

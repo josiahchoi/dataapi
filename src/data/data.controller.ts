@@ -1,7 +1,8 @@
-import { Controller, Post, Body, Res, Get, Param, Query } from '@nestjs/common';
+import { Controller, Post, Body, Res, Get, Param, Query, Delete, HttpCode, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 import { DataService } from './data.service';
 import { Table1DataDto } from './interfaces/table1data.dto';
+import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError'
 
 @Controller('data')
 export class DataController {
@@ -11,11 +12,14 @@ export class DataController {
     async query(@Query() query, @Res() res:Response): Promise<Response> {
       try {
         const dataEntities = await this.dataService.queryData(query);
-        return res.status(200).json(dataEntities);
+        return res.status(HttpStatus.OK).json(dataEntities);
         //return res.status(201).send();
       } catch (e) {
-        console.log("Error is: " + e);
-        return res.status(400).send();
+        if (e instanceof EntityNotFoundError){
+          return res.status(HttpStatus.NOT_FOUND).send();
+        } else {
+          return res.status(HttpStatus.BAD_REQUEST).send();  
+        }
       }
     } 
 
@@ -23,10 +27,14 @@ export class DataController {
     async postData(@Body() data : Table1DataDto, @Res() res:Response): Promise<Response> {
       try {
         await this.dataService.postData(data);
-        return res.status(201).send();
+        return res.status(HttpStatus.CREATED).send();
       } catch (e) {
-        console.log("Error is: " + e);
-        return res.status(400).send();
+          if (e instanceof Error){
+            if (e.message === "Duplicated") {
+              return res.status(HttpStatus.CONFLICT).send();
+            } 
+          }
+          return res.status(HttpStatus.BAD_REQUEST).send(); 
       }
     }
 
