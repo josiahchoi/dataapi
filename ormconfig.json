@@ -5,9 +5,10 @@
   "username": "dataapi",
   "password": "dataapi",
   "database": "dataapi",
-  "entities": ["src/data/**/*.entity.ts"],
+  "entities_old": ["dist/**/*.entity{.ts,.js}", "dist/src/**/*.entity{.ts,.js}"],
+  "entities": ["src/data/**/*.entity.ts"], 
   "synchronize": false,
-  "migrations": ["migration/*.ts"],
+  "migrations_old": ["migration/*.ts"],
   "cli": {
       "migrationsDir": "migration"
   }

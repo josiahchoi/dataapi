@@ -3,28 +3,27 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { Table1DataDto } from 'src/data/interfaces/table1data.dto';
+import { DataModule } from '../src/data/data.module';
 
-describe('AppController (e2e)', () => {
+describe('DataController (e2e)', () => {
   let app: INestApplication;
 
-
-
-  beforeAll(async () => {
+  beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [DataModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('/data (GET)', () => {
     return request(app.getHttpServer())
-      .get('/')
+      .get('/data')
       .expect(200)
-      .expect('Hello World!');
   });
 
+  /*
   const table1data: Table1DataDto = {
       name: "Cookie",
       valid: true,
@@ -37,21 +36,7 @@ describe('AppController (e2e)', () => {
       .send(table1data)
       .expect(201)
   });
-
-  it('/data (POST)', () => {
-    return request(app.getHttpServer())
-      .post('/data')
-      .send(table1data)
-      .expect(201)
-  });
-
-
-  /*
-  it('/data (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/data')
-      .expect(200)
-  });*/
+  */
 
   /*
   afterEach(async () => {
