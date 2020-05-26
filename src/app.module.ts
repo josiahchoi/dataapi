@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { DataModule } from './data/data.module';
 import { Connection } from 'typeorm';
 import { DataController } from './data/data.controller';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 const ormOptionsRuntime: TypeOrmModuleOptions = {
   type: "mysql",
@@ -40,7 +42,7 @@ if (process.env['E2E']) {
 }
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormOptions), DataModule],
+  imports: [TypeOrmModule.forRoot(ormOptions), DataModule, AuthModule, UsersModule],
   controllers: [AppController],
   providers: [AppService],
   exports: [TypeOrmModule]
