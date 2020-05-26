@@ -6,7 +6,7 @@ import { DataModule } from './data/data.module';
 import { Connection } from 'typeorm';
 import { DataController } from './data/data.controller';
 
-const ormOptions: TypeOrmModuleOptions = {
+const ormOptionsRuntime: TypeOrmModuleOptions = {
   type: "mysql",
   host: process.env['TYPEORM_HOST'] || 'localhost',
   port: 3306,
@@ -17,6 +17,28 @@ const ormOptions: TypeOrmModuleOptions = {
   entities: ["dist/**/*.entity{.ts,.js}"],
   synchronize: false
 }
+
+const ormOptionsE2E: TypeOrmModuleOptions = {
+  type: "mysql",
+  host: process.env['TYPEORM_HOST'] || 'localhost',
+  port: 3306,
+  username: process.env['TYPEORM_USERNAME'] || 'dataapi',
+  password: process.env['TYPEORM_PASSWORD'] || 'dataapi',
+  database: "dataapi",
+  entities: ["src/data/**/*.entity.ts"],
+  synchronize: false
+}
+
+
+let ormOptions = ormOptionsRuntime;
+
+if (process.env['E2E']) {
+  console.log("Using E2E orm options")
+  ormOptions = ormOptionsE2E;
+} else {
+  console.log("Using Runtime orm options")
+}
+
 @Module({
   imports: [TypeOrmModule.forRoot(ormOptions), DataModule],
   controllers: [AppController],

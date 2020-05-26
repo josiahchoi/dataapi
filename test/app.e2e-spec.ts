@@ -19,6 +19,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/ (GET)', () => {
+    console.log("Test 1");
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
@@ -31,14 +32,17 @@ describe('AppController (e2e)', () => {
       count: 1,
   }
 
-  it('/data (POST)', () => {
+  it('/data (GET)', () => {
+    console.log("Test 2");
+
     return request(app.getHttpServer())
-      .post('/data')
-      .send(table1data)
-      .expect(201)
+      .get('/data')
+      .expect(200)
   });
 
   it('/data (POST)', () => {
+    console.log("Test 3");
+
     return request(app.getHttpServer())
       .post('/data')
       .send(table1data)
@@ -53,9 +57,8 @@ describe('AppController (e2e)', () => {
       .expect(200)
   });*/
 
-  /*
-  afterEach(async () => {
+  afterAll(async () => {
     await app.close();
   });
-  */
+
 });
