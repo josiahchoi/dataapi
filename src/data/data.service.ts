@@ -4,6 +4,7 @@ import { SpecEntity } from './spec.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DataEntity } from './data.entity';
+import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 
 @Injectable()
 export class DataService {
@@ -14,13 +15,13 @@ export class DataService {
         return  specEntities.find((x) => x.columnName === columnName)
      }
 
-    createDataEntity = (data: Table1DataDto, specEntities: SpecEntity[]): DataEntity => {
-        const dataEntity = new DataEntity();
+    applyDataEntity = (dataEntity: DataEntity, data: Table1DataDto, specEntities: SpecEntity[]): void => {
+//        const dataEntity = new DataEntity();
         for (let key in data){
             let spec = this.findSpec(key, specEntities)
             dataEntity[`column${spec.row}`] = this.valueConverter(data[key], spec.dataType);
         }
-        return dataEntity;
+//        return dataEntity;
     }
 
     valueConverter = (value: any, type: string): string => {
@@ -79,7 +80,8 @@ export class DataService {
         if (existingData){
             throw new Error("Duplicated");            
         } else {
-            const dataEntity = this.createDataEntity(data, specEntities);
+            const dataEntity = new DataEntity()
+            this.applyDataEntity(dataEntity, data, specEntities);
             return this.dataRepository.save(dataEntity);
         }
     }
@@ -92,6 +94,14 @@ export class DataService {
         return new Promise<Table1DataDto>((resolve) => {
             resolve(this.convertTable1DataDto(dataEntity, specEntities));
           });;
+    }
+
+
+    async updateData(data: Table1DataDto): Promise<DataEntity> {
+        const specEntities = await this.specRepository.find()
+        const existingDataEntity = await this.dataRepository.findOneOrFail({where: this.createQueryPart({name: data.name}, specEntities)})
+        this.applyDataEntity(existingDataEntity, data, specEntities);
+        return this.dataRepository.save(existingDataEntity);
     }
 
 }

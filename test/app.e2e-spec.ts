@@ -16,25 +16,13 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  const initialDataApple: Table1DataDto = {
-    name: "Apple",
-    valid: true,
-    count: 1,
-}
-
-const initialDataBanana: Table1DataDto = {
-  name: "Banana",
-  valid: false,
-  count: -12,
-}
-
-  const table1data: Table1DataDto = {
-      name: "Cookie",
-      valid: true,
-      count: 103,
-  }
-
   it('should create initial data: Apple', () => {
+    const initialDataApple: Table1DataDto = {
+      name: "Apple",
+      valid: true,
+      count: 1,
+    }
+  
     return request(app.getHttpServer())
       .post('/data')
       .send(initialDataApple)
@@ -46,6 +34,12 @@ const initialDataBanana: Table1DataDto = {
   });
 
   it('should create initial data: Banana', () => {
+    const initialDataBanana: Table1DataDto = {
+      name: "Banana",
+      valid: false,
+      count: -12,
+    }
+    
     return request(app.getHttpServer())
       .post('/data')
       .send(initialDataBanana)
@@ -55,6 +49,24 @@ const initialDataBanana: Table1DataDto = {
         }
       })
   });
+
+  it('should create initial data: Cookie', () => {
+    const initialDataCookie: Table1DataDto = {
+      name: "Cookie",
+      valid: true,
+      count: 103,
+  }
+    
+    return request(app.getHttpServer())
+      .post('/data')
+      .send(initialDataCookie)
+      .expect(function(res) {
+        if (res.status !== HttpStatus.CREATED && res.status !== HttpStatus.CONFLICT) {
+          throw Error('unexpected status code: ' + res.status);
+        }
+      })
+  });
+
 
   it('should query data with name: Apple', () => {
     return request(app.getHttpServer())
@@ -74,6 +86,34 @@ const initialDataBanana: Table1DataDto = {
       .get('/data?name=Something')
       .expect(HttpStatus.NOT_FOUND);
   });
+
+
+  it('should update Banana Data', () => {
+    const updatedBanadaData: Table1DataDto = {
+      name: "Banana",
+      valid: true,
+      count: 12,
+    }
+    
+    return request(app.getHttpServer())
+      .put('/data')
+      .send(updatedBanadaData)
+      .expect(HttpStatus.OK)
+  });
+
+  it('should verify updated Banana Data', () => {
+    const updatedBanadaData = {
+      name: "Banana",
+      valid: true,
+      count: 12,
+    }
+
+    return request(app.getHttpServer())
+    .get('/data?name=Banana')
+    .expect(HttpStatus.OK)
+    .expect(updatedBanadaData)
+  });
+
 
 
   afterAll(async () => {
