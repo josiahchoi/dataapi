@@ -1,6 +1,6 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class InitSpecData1590463175414 implements MigrationInterface {
+export class InitSpecData1590490362036 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query("INSERT INTO `tableformat1` (`row`,`columnName`,`dataType`) VALUES (1, 'name', 'TEXT')");

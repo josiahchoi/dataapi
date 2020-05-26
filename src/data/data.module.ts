@@ -28,7 +28,7 @@ const aaa: TypeOrmModuleOptions = {
 }
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SpecEntity])/*TypeOrmModule.forRoot(aaa), TypeOrmModule.forFeature([SpecEntity]), TypeOrmModule.forRoot(ormOptions),  TypeOrmModule.forRoot({entities: [SpecEntity]}) */],
+  imports: [TypeOrmModule.forFeature([SpecEntity, DataEntity])/*TypeOrmModule.forRoot(aaa), TypeOrmModule.forFeature([SpecEntity]), TypeOrmModule.forRoot(ormOptions),  TypeOrmModule.forRoot({entities: [SpecEntity]}) */],
   providers: [DataService],
   controllers: [DataController],
 //  exports: [TypeOrmModule]

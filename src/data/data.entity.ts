@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 
 @Entity({name: 'tableformat1_data'})
 export class DataEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   row: number;
   
   @Column()

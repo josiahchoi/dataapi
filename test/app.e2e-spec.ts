@@ -26,10 +26,23 @@ describe('AppController (e2e)', () => {
       .expect('Hello World!');
   });
 
+  const initialDataApple: Table1DataDto = {
+    name: "Apple",
+    valid: true,
+    count: 1,
+}
+
+const initialDataBanana: Table1DataDto = {
+  name: "Banana",
+  valid: false,
+  count: -12,
+}
+
+
   const table1data: Table1DataDto = {
       name: "Cookie",
       valid: true,
-      count: 1,
+      count: 103,
   }
 
   it('/data (GET)', () => {
@@ -40,15 +53,19 @@ describe('AppController (e2e)', () => {
       .expect(200)
   });
 
-  it('/data (POST)', () => {
-    console.log("Test 3");
-
+  it('should create initial data: Apple', () => {
     return request(app.getHttpServer())
       .post('/data')
-      .send(table1data)
+      .send(initialDataApple)
       .expect(201)
   });
 
+  it('should create initial data: Banana', () => {
+    return request(app.getHttpServer())
+      .post('/data')
+      .send(initialDataBanana)
+      .expect(201)
+  });
 
   /*
   it('/data (GET)', () => {
