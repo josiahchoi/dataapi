@@ -1,4 +1,21 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Post, Body, Res } from '@nestjs/common';
+import { Response } from 'express';
+import { DataService } from './data.service';
+import { Table1DataDto } from './interfaces/table1data.dto';
 
 @Controller('data')
-export class DataController {}
+export class DataController {
+    constructor(private readonly dataService: DataService) {}
+
+    @Post()
+    async postData(@Body() data : Table1DataDto, @Res() res:Response): Promise<Response> {
+      try {
+        this.dataService.postData(data);
+        return res.status(201).send();
+      } catch (e) {
+        console.log("Error is: " + e);
+        return res.status(400).send();
+      }
+    }
+
+}
