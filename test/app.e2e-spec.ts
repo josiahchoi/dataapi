@@ -46,6 +46,19 @@ describe('AppController (e2e)', () => {
       .expect(HttpStatus.OK)
   });
 
+  it('should should create initial data without valid token', () => {
+    const initialDataApple: Table1DataDto = {
+      name: "Apple",
+      valid: true,
+      count: 1,
+    }
+  
+    return request(app.getHttpServer())
+      .post('/data')
+      .set({Authorization: `Bearer `})
+      .send(initialDataApple)
+      .expect(HttpStatus.UNAUTHORIZED)
+  });
 
   it('should create initial data: Apple', () => {
     const initialDataApple: Table1DataDto = {
@@ -157,6 +170,13 @@ describe('AppController (e2e)', () => {
       .expect(HttpStatus.BAD_REQUEST)
   });
 
+  it('should not query data without valid token', () => {
+    return request(app.getHttpServer())
+      .get('/data?name=Apple')
+      .set({Authorization: `Bearer `})
+      .expect(HttpStatus.UNAUTHORIZED)
+  });
+
   it('should query data with name: Apple', () => {
     return request(app.getHttpServer())
       .get('/data?name=Apple')
@@ -172,6 +192,19 @@ describe('AppController (e2e)', () => {
       .expect(HttpStatus.NOT_FOUND);
   });
 
+  it('should update Banana Data with valid token', () => {
+    const updatedBanadaData: Table1DataDto = {
+      name: "Banana",
+      valid: true,
+      count: 12,
+    }
+    
+    return request(app.getHttpServer())
+      .put('/data')
+      .set({Authorization: `Bearer `})
+      .send(updatedBanadaData)
+      .expect(HttpStatus.UNAUTHORIZED)
+  });
 
   it('should update Banana Data', () => {
     const updatedBanadaData: Table1DataDto = {
