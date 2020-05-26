@@ -29,7 +29,7 @@ $ npm run test:e2e
 ## Setup database
 
 ```bash
-docker run --rm -it -e MYSQL_ROOT_PASSWORD=mysql -e MYSQL_DATABASE=dataapi -e MYSQL_USER=dataapi -e MYSQL_PASSWORD=dataapi -p 3306:3306 mysql:5.7.29
+docker run --name mysql --rm -it -e MYSQL_ROOT_PASSWORD=mysql -e MYSQL_DATABASE=dataapi -e MYSQL_USER=dataapi -e MYSQL_PASSWORD=dataapi -p 3306:3306 mysql:5.7.29
 ```
 
 ## Test End to End
