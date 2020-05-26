@@ -1,38 +1,17 @@
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 
-@Entity()
+@Entity({name: 'tableformat1_data'})
 export class DataEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   row: number;
   
-  @Column({nullable: true})
+  @Column()
   column1: string;
 
-  @Column({nullable: true})
+  @Column()
   column2: string;
 
-  @Column({nullable: true})
+  @Column()
   column3: string;
-
-  @Column({nullable: true})
-  column4: string;
-
-  @Column({nullable: true})
-  column5: string;
-
-  @Column({nullable: true})
-  column6: string;
-
-  @Column({nullable: true})
-  column7: string;
-
-  @Column({nullable: true})
-  column8: string;
-
-  @Column({nullable: true})
-  column9: string;
-
-  @Column({nullable: true})
-  column10: string;
 }

@@ -1,9 +1,9 @@
-import { PrimaryGeneratedColumn, Column, Entity } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
-@Entity()
+@Entity({name: 'tableformat1'} )
 export class SpecEntity {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     row: number;
 
     @Column()
