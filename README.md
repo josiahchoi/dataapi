@@ -33,7 +33,23 @@ npn run start:dev
 
 Test API Using CURL
 
+Login system and get token
+
 ```bash
-curl -X POST -H "Content-Type: application/json" -d '{"name": "Apple", "valid": true, "count": 1}' http://localhost:3000/data -v
-curl -X GET "http://localhost:3000/data?name=Apple"
+curl -s -X POST http://localhost:3000/auth/login -d '{"username": "josiah", "password": "secret"}' -H "Content-Type: application/json"
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impvc2....." -d '{"name": "Apple", "valid": true, "count": 1}' http://localhost:3000/data -v
+curl -X GET -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impvc2....." "http://localhost:3000/data?name=Apple"
 ```
+
+## Clean Up
+
+delete mysql docker instance
+
+```bash
+docker kill mysql
+```
+
+## Future Works
+
+- create docker-compose to wrap entire service without seperated database instance - more portable for developer.
+- Create a reverse proxy for https with letsencrypt.
