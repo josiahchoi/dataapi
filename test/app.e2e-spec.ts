@@ -45,14 +45,6 @@ const initialDataBanana: Table1DataDto = {
       count: 103,
   }
 
-  it('/data (GET)', () => {
-    console.log("Test 2");
-
-    return request(app.getHttpServer())
-      .get('/data')
-      .expect(200)
-  });
-
   it('should create initial data: Apple', () => {
     return request(app.getHttpServer())
       .post('/data')
@@ -66,6 +58,19 @@ const initialDataBanana: Table1DataDto = {
       .send(initialDataBanana)
       .expect(201)
   });
+
+  it('should query data with name: Apple', (done) => {
+    return request(app.getHttpServer())
+      .get('/data?name=Apple')
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+//        expect(res.body).to.be.eql({ error: "make an error" });
+        console.log(res.body)
+        done();
+      });
+  });
+
 
   /*
   it('/data (GET)', () => {
