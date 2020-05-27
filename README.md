@@ -28,7 +28,7 @@ In your project root folder
 ```bash
 npm install
 npm run migration:run
-npn run start:dev
+npm run start:dev
 ```
 
 Test API Using CURL

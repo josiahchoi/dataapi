@@ -39,14 +39,14 @@ describe('AppController (e2e)', () => {
       });
   });
 
-  it('should allow to access user profile without token', () => {  
+  it('should allow to access user profile with valid token', () => {  
     return request(app.getHttpServer())
       .get('/profile')
       .set({Authorization: `Bearer ${accessToken}`})
       .expect(HttpStatus.OK)
   });
 
-  it('should should create initial data without valid token', () => {
+  it('should not allow to create initial data without valid token', () => {
     const initialDataApple: Table1DataDto = {
       name: "Apple",
       valid: true,
@@ -170,7 +170,7 @@ describe('AppController (e2e)', () => {
       .expect(HttpStatus.BAD_REQUEST)
   });
 
-  it('should not query data without valid token', () => {
+  it('should not allow query data without valid token', () => {
     return request(app.getHttpServer())
       .get('/data?name=Apple')
       .set({Authorization: `Bearer `})
@@ -192,7 +192,7 @@ describe('AppController (e2e)', () => {
       .expect(HttpStatus.NOT_FOUND);
   });
 
-  it('should update Banana Data with valid token', () => {
+  it('should not allow update Banana Data without valid token', () => {
     const updatedBanadaData: Table1DataDto = {
       name: "Banana",
       valid: true,
